@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GeoSim Flotte</title>
+<meta name="description" content="Simulateur de géolocalisation de véhicules pour démonstrations de salle de contrôle (pompiers, police, SAMU, bus, taxis, livraisons).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-name">GeoSim</span>
+      <span class="brand-city" id="cityName">Aucune ville</span>
+    </div>
+
+    <div class="clock-block">
+      <span class="clock" id="clock">--:--:--</span>
+      <span class="clock-state" id="clockState"></span>
+    </div>
+
+    <div class="time-ctrl" role="group" aria-label="Vitesse de simulation">
+      <button class="tbtn" id="btnPause" title="Pause / lecture (Espace)">❚❚</button>
+      <button class="tbtn speed" data-speed="1" title="Temps réel (1)">×1</button>
+      <button class="tbtn speed" data-speed="2" title="(2)">×2</button>
+      <button class="tbtn speed" data-speed="5" title="(3)">×5</button>
+      <button class="tbtn speed" data-speed="10" title="(4)">×10</button>
+      <button class="tbtn speed" data-speed="30" title="(5)">×30</button>
+    </div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="loading" id="loading" hidden><span class="spinner"></span><span id="loadingText"></span></div>
+  </header>
+
+  <aside class="side left">
+    <section class="card">
+      <h2>Ville</h2>
+      <form id="citySearch" class="search">
+        <label class="sr" for="cityInput">Rechercher une ville</label>
+        <input id="cityInput" type="search" placeholder="Rechercher une ville…" autocomplete="off">
+        <button type="submit" class="btn">Chercher</button>
+      </form>
+      <ul class="results" id="cityResults"></ul>
+      <div class="chips" id="cityChips"></div>
+    </section>
+
+    <section class="card">
+      <h2>Flotte</h2>
+      <div class="fleet" id="fleetForm"></div>
+      <button class="btn primary wide" id="btnApplyFleet">Relancer la flotte</button>
+    </section>
+
+    <section class="card">
+      <h2>Scénario</h2>
+      <label class="toggle"><input type="checkbox" id="optAutoInc" checked><span>Incidents automatiques</span></label>
+      <label class="toggle"><input type="checkbox" id="optEvents" checked><span>Aléas (pannes, excès de vitesse)</span></label>
+      <button class="btn wide" id="btnRandomInc">Déclencher un incident aléatoire <kbd>I</kbd></button>
+      <p class="hint">Astuce : cliquez n'importe où sur la carte pour créer un incident à cet endroit.</p>
+    </section>
+
+    <section class="card">
+      <h2>Affichage</h2>
+      <label class="toggle"><input type="checkbox" id="optLabels" checked><span>Indicatifs des véhicules</span></label>
+      <label class="toggle"><input type="checkbox" id="optLines" checked><span>Lignes de bus</span></label>
+      <label class="toggle"><input type="checkbox" id="optBases" checked><span>Casernes, commissariats, hôpitaux</span></label>
+      <button class="btn wide" id="btnFit">Recentrer sur la ville</button>
+    </section>
+  </aside>
+
+  <main class="map-wrap">
+    <div id="map"></div>
+
+    <div class="welcome" id="welcome">
+      <div class="welcome-box">
+        <h1>Simulateur de flotte géolocalisée</h1>
+        <p>Choisissez une ville pour déployer pompiers, police, SAMU, bus, taxis et livraisons sur les vraies routes.</p>
+        <div class="chips" id="welcomeChips"></div>
+      </div>
+    </div>
+
+    <div class="detail" id="detail" hidden>
+      <div class="detail-head">
+        <span class="detail-icon" id="dIcon"></span>
+        <div>
+          <div class="detail-title" id="dTitle"></div>
+          <div class="detail-sub" id="dSub"></div>
+        </div>
+        <button class="icon-btn" id="dClose" title="Fermer (Échap)" aria-label="Fermer">✕</button>
+      </div>
+      <div class="detail-status" id="dStatus"></div>
+      <dl class="telemetry">
+        <div><dt>Vitesse</dt><dd id="dSpeed"></dd></div>
+        <div><dt>Cap</dt><dd id="dHeading"></dd></div>
+        <div><dt>Carburant</dt><dd><span class="bar"><span id="dFuelBar"></span></span><span id="dFuel"></span></dd></div>
+        <div><dt>Compteur</dt><dd id="dOdo"></dd></div>
+        <div class="span2"><dt>Position</dt><dd id="dPos"></dd></div>
+        <div class="span2"><dt>Mission</dt><dd id="dMission"></dd></div>
+      </dl>
+      <div class="detail-actions">
+        <button class="btn" id="dFollow">Suivre <kbd>F</kbd></button>
+        <button class="btn" id="dHS">Mettre hors service</button>
+      </div>
+    </div>
+
+    <div class="toasts" id="toasts" aria-live="polite"></div>
+  </main>
+
+  <aside class="side right">
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-tab="vehicles" role="tab">Véhicules <span class="count" id="cntVeh">0</span></button>
+      <button class="tab" data-tab="incidents" role="tab">Incidents <span class="count" id="cntInc">0</span></button>
+      <button class="tab" data-tab="alerts" role="tab">Alertes <span class="count badge" id="cntAlerts">0</span></button>
+    </div>
+
+    <div class="tabpanel" id="tab-vehicles">
+      <div class="list-tools">
+        <input id="vehFilter" type="search" placeholder="Filtrer (indicatif, type, statut)…" aria-label="Filtrer les véhicules">
+        <div class="chips small" id="typeFilter"></div>
+      </div>
+      <ul class="veh-list" id="vehList"></ul>
+    </div>
+
+    <div class="tabpanel" id="tab-incidents" hidden>
+      <ul class="inc-list" id="incList"></ul>
+      <p class="empty" id="incEmpty">Aucun incident. Cliquez sur la carte pour en créer un.</p>
+    </div>
+
+    <div class="tabpanel" id="tab-alerts" hidden>
+      <ul class="alert-list" id="alertList"></ul>
+      <p class="empty" id="alertEmpty">Aucune alerte pour le moment.</p>
+    </div>
+  </aside>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
