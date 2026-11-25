@@ -126,6 +126,10 @@ small { font-size: .55em; color: var(--muted); font-weight: 500; margin-left: 3p
 /* ---------------------------------------------------------------- Carte */
 .map-wrap { position: relative; min-height: 0; min-width: 0; }
 #map { position: absolute; inset: 0; background: #0a0f15; }
+.tiles-dark { filter: invert(1) hue-rotate(180deg) brightness(.85) contrast(.9) saturate(.35); }
+.leaflet-control-layers { background: rgba(13, 19, 27, .94) !important; color: var(--text); border: 1px solid var(--line-2) !important; border-radius: 6px !important; }
+.leaflet-control-layers-toggle { filter: invert(1); }
+.leaflet-bottom.leaflet-right { bottom: 146px; right: 168px; }
 .leaflet-container { font-family: var(--sans); background: #0a0f15; }
 .leaflet-control-zoom a { background: var(--panel-2) !important; color: var(--text) !important; border-color: var(--line) !important; }
 .leaflet-control-attribution { background: rgba(7, 11, 16, .7) !important; color: var(--faint) !important; font-size: 10px; }
