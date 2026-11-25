@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Régie BPS</title>
+<meta name="description" content="Régie de démonstration : déclencher scénarios et incidents sur l'écran principal Barco Power Solutions.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/regie.css">
+</head>
+<body class="regie">
+<header class="rg-top">
+  <div class="brand">
+    <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" class="bm-ring"/><path d="M16 16 L16 4.5 A11.5 11.5 0 0 1 25.96 21.75 Z" class="bm-sun"/><path d="M16 16 L25.96 21.75 A11.5 11.5 0 0 1 6.04 21.75 Z" class="bm-wind"/><path d="M16 16 L6.04 21.75 A11.5 11.5 0 0 1 16 4.5 Z" class="bm-grid"/><circle cx="16" cy="16" r="3.2" class="bm-hub"/></svg>
+    <div class="brand-txt"><span class="brand-name">Régie de démonstration</span><span class="brand-sub">Barco Power Solutions · pilotage de l’écran principal</span></div>
+  </div>
+  <div class="rg-conn" id="conn"><span class="dot"></span><span id="connText">Recherche de l’écran principal…</span></div>
+  <div class="rg-kpis" id="rgKpis"></div>
+  <a class="btn ghost" href="./" target="bps-main" id="openMain">Ouvrir l’écran principal</a>
+</header>
+
+<main class="rg-grid">
+  <section class="rc rc-view">
+    <h2>Affichage</h2>
+    <div class="row seg-row" id="tabBtns">
+      <button class="btn" data-tab="map">Carte</button><button class="btn" data-tab="dash">Tableaux de bord</button><button class="btn" data-tab="inc">Incidents</button>
+    </div>
+    <div class="row"><button class="btn" id="btnEurope">Vue Europe</button><select id="focusPark" aria-label="Site à afficher"></select><button class="btn" id="btnFocus">Zoomer sur le site</button></div>
+    <label class="tgl"><input type="checkbox" id="tglTour"><span></span>Visite automatique <em>enchaîne carte, sites, tableaux de bord et incidents</em></label>
+    <label class="tgl"><input type="checkbox" id="tglFocus" checked><span></span>Zoom auto sur les alarmes critiques</label>
+  </section>
+
+  <section class="rc rc-time">
+    <h2>Temps</h2>
+    <div class="row" id="speedBtns">
+      <button class="btn" id="btnPause">Pause</button>
+      <button class="btn" data-speed="1">×1</button><button class="btn" data-speed="10">×10</button><button class="btn" data-speed="60">×60</button><button class="btn" data-speed="300">×300</button>
+    </div>
+    <div class="row" id="todBtns">
+      <span class="lbl">Aller à</span>
+      <button class="btn" data-h="8">8 h</button><button class="btn" data-h="12">Midi</button><button class="btn" data-h="16">16 h</button><button class="btn" data-h="19">19 h</button><button class="btn" data-h="23">Nuit</button>
+    </div>
+    <div class="rg-clock" id="rgClock">--:--</div>
+  </section>
+
+  <section class="rc rc-auto">
+    <h2>Mode automatique</h2>
+    <div class="lbl">Événements aléatoires</div>
+    <div class="seg" id="actSeg"><button data-v="off">Arrêt</button><button data-v="calme">Calme</button><button data-v="normal">Normal</button><button data-v="intense">Intense</button></div>
+    <label class="tgl"><input type="checkbox" id="tglAuto" checked><span></span>Traitement automatique des incidents <em>acquittement, envoi des équipes, résolution</em></label>
+  </section>
+
+  <section class="rc rc-scen">
+    <h2>Scénarios</h2>
+    <div class="scen">
+      <button class="sc storm" data-s="storm" data-a="north"><b>Tempête mer du Nord</b><span>Écosse et nord de l’Angleterre</span></button>
+      <button class="sc storm" data-s="storm" data-a="channel"><b>Tempête sur la Manche</b><span>Saint-Brieuc → Dieppe</span></button>
+      <button class="sc storm" data-s="storm" data-a="atlantic"><b>Tempête Atlantique</b><span>Yeu, Saint-Nazaire, Bretagne</span></button>
+      <button class="sc storm" data-s="storm" data-a="med"><b>Coup de vent, golfe du Lion</b><span>Provence Grand Large</span></button>
+      <button class="sc cloud" data-s="cloud" data-a="iberia"><b>Passage nuageux</b><span>Espagne et Portugal</span></button>
+      <button class="sc heat" data-s="heat"><b>Vague de chaleur</b><span>Solaire du sud de l’Europe</span></button>
+      <button class="sc grid" data-s="grid_fr" data-a="FR"><b>Bridage réseau France</b><span>Consigne sur 9 sites</span></button>
+      <button class="sc fault" data-s="wave" data-a="4"><b>Série de défauts</b><span>4 incidents aléatoires</span></button>
+      <div class="sc-pair">
+        <button class="sc crit" data-s="export_cable" data-sel="#selCable"><b>Coupure câble d’export</b><span>Parc entier déconnecté</span></button>
+        <select id="selCable" aria-label="Parc concerné"></select>
+      </div>
+      <div class="sc-pair">
+        <button class="sc crit" data-s="substation" data-sel="#selSub"><b>Défaut poste de livraison</b><span>Centrale solaire découplée</span></button>
+        <select id="selSub" aria-label="Centrale concernée"></select>
+      </div>
+      <button class="sc" id="btnRandom"><b>Incident aléatoire</b><span>Type, site et unité au hasard</span></button>
+      <button class="sc ok" data-s="calm"><b>Retour au calme</b><span>Clôture de tous les incidents</span></button>
+    </div>
+  </section>
+
+  <section class="rc rc-inc">
+    <h2>Incident ciblé</h2>
+    <form id="incForm" class="form">
+      <label class="fld"><span>Site</span><select id="iPark"></select></label>
+      <label class="fld"><span>Type</span><select id="iType"></select></label>
+      <label class="fld"><span>Unité</span><select id="iUnit"></select></label>
+      <label class="fld"><span>Sévérité</span><select id="iSev"><option value="">Par défaut</option><option value="info">Info</option><option value="mineure">Mineure</option><option value="majeure">Majeure</option><option value="critique">Critique</option></select></label>
+      <label class="fld wide"><span>Description (facultatif)</span><input type="text" id="iDesc" placeholder="Texte par défaut du type d’incident"></label>
+      <label class="tgl wide"><input type="checkbox" id="iShow" checked><span></span>Afficher l’incident sur l’écran principal</label>
+      <div class="wide"><button class="btn primary" type="submit">Déclencher l’incident</button></div>
+    </form>
+  </section>
+
+  <section class="rc rc-list">
+    <h2>Incidents actifs <span class="cnt" id="incCnt">0</span></h2>
+    <div class="rg-incs" id="rgIncs"><div class="empty">Aucun incident actif.</div></div>
+  </section>
+
+  <section class="rc rc-log">
+    <h2>Journal</h2>
+    <div class="rg-log" id="rgLog"></div>
+    <div class="danger">
+      <button class="btn danger" id="btnReset">Réinitialiser la simulation</button>
+      <span class="confirm" id="resetConfirm" hidden>Tous les incidents et l’historique seront effacés. <button class="btn danger sm" id="btnResetYes">Réinitialiser</button><button class="btn sm" id="btnResetNo">Annuler</button></span>
+    </div>
+  </section>
+</main>
+
+<script src="js/data.js"></script>
+<script src="js/bus.js"></script>
+<script src="js/regie.js"></script>
+</body>
+</html>

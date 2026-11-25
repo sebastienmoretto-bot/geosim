@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Barco Power Solutions</title>
+<meta name="description" content="Salle de contrôle de démonstration : supervision d'un parc éolien en mer et solaire européen (données simulées).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="vendor/leaflet/leaflet.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app" id="app" data-tab="map">
+  <header class="topbar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" class="bm-ring"/><path d="M16 16 L16 4.5 A11.5 11.5 0 0 1 25.96 21.75 Z" class="bm-sun"/><path d="M16 16 L25.96 21.75 A11.5 11.5 0 0 1 6.04 21.75 Z" class="bm-wind"/><path d="M16 16 L6.04 21.75 A11.5 11.5 0 0 1 16 4.5 Z" class="bm-grid"/><circle cx="16" cy="16" r="3.2" class="bm-hub"/></svg>
+      <div class="brand-txt"><span class="brand-name">Barco Power Solutions</span><span class="brand-sub">Centre de conduite des énergies renouvelables</span></div>
+    </div>
+    <nav class="tabs" role="tablist">
+      <button class="tab" role="tab" data-tab="map">Carte</button>
+      <button class="tab" role="tab" data-tab="dash">Tableaux de bord</button>
+      <button class="tab" role="tab" data-tab="inc">Incidents <span class="tab-badge" id="tabBadge">0</span></button>
+    </nav>
+    <div class="kpis" id="kpis"></div>
+    <div class="clock-block">
+      <div class="clock" id="clock">--:--:--</div>
+      <div class="clock-date" id="clockDate"></div>
+    </div>
+    <div class="time-ctrl" role="group" aria-label="Vitesse de simulation">
+      <button class="tbtn" id="btnPause" title="Pause / lecture (Espace)">❚❚</button>
+      <button class="tbtn speed" data-speed="1" title="Temps réel (1)">×1</button>
+      <button class="tbtn speed" data-speed="10" title="(2)">×10</button>
+      <button class="tbtn speed" data-speed="60" title="(3)">×60</button>
+      <button class="tbtn speed" data-speed="300" title="(4)">×300</button>
+    </div>
+    <a class="tbtn regie-link" href="regie.html" target="bps-regie" title="Ouvrir la régie (R)">Régie</a>
+  </header>
+
+  <!-- ============ Vue carte ============ -->
+  <main class="view view-map">
+    <aside class="side left" aria-label="Solaire">
+      <div class="side-head solar">
+        <div class="sh-top"><span class="sh-ico sun" aria-hidden="true"></span><h2>Solaire</h2><span class="sh-cap" id="solarCap"></span></div>
+        <div class="sh-big"><span id="solarMW">0</span><small>MW</small></div>
+        <div class="sh-bar"><div id="solarBar"></div></div>
+        <div class="sh-meta" id="solarMeta"></div>
+        <div class="sh-spark" id="solarSpark"></div>
+      </div>
+      <div class="park-list" id="solarList"></div>
+    </aside>
+
+    <section class="map-wrap">
+      <div id="map"></div>
+      <div class="ov park-card" id="parkCard" hidden></div>
+      <div class="ov unit-card" id="unitCard" hidden></div>
+      <div class="map-tools">
+        <button class="mbtn" id="btnEurope" title="Vue Europe (E)">Europe</button>
+        <button class="mbtn" id="btnNewInc" title="Créer un incident (N)">+ Incident</button>
+      </div>
+      <div class="legend" id="legend"></div>
+      <div class="tour-chip" id="tourChip" hidden><span class="dot"></span><span id="tourText">Visite automatique</span></div>
+      <div class="journal" id="journal" aria-live="polite"></div>
+    </section>
+
+    <aside class="side right" aria-label="Éolien">
+      <div class="side-head wind">
+        <div class="sh-top"><span class="sh-ico fan" aria-hidden="true"></span><h2>Éolien en mer</h2><span class="sh-cap" id="windCap"></span></div>
+        <div class="sh-big"><span id="windMW">0</span><small>MW</small></div>
+        <div class="sh-bar"><div id="windBar"></div></div>
+        <div class="sh-meta" id="windMeta"></div>
+        <div class="sh-spark" id="windSpark"></div>
+      </div>
+      <div class="park-list" id="windList"></div>
+    </aside>
+  </main>
+
+  <!-- ============ Tableaux de bord ============ -->
+  <main class="view view-dash" id="dash">
+    <div class="dash-tiles" id="dashTiles"></div>
+    <section class="dcard d-prod"><header><h3>Production sur 24 h et prévision</h3><div class="lg" id="lgProd"></div></header><div class="chart-box" id="chProd"></div></section>
+    <section class="dcard d-mix"><header><h3>Mix de production</h3></header><div class="mix" id="chMix"></div></section>
+    <section class="dcard d-country"><header><h3>Énergie du jour par pays</h3><span class="hint">MWh</span></header><div class="hbars" id="chCountry"></div></section>
+    <section class="dcard d-price"><header><h3>Prix spot de l’électricité</h3><span class="hint" id="priceNow"></span></header><div class="chart-box" id="chPrice"></div></section>
+    <section class="dcard d-rank"><header><h3>Classement des sites</h3><span class="hint">facteur de charge instantané</span></header><div class="rank" id="chRank"></div></section>
+    <section class="dcard d-avail"><header><h3>Disponibilité technique</h3><span class="hint">par site</span></header><div class="hbars" id="chAvail"></div></section>
+    <section class="dcard d-inc7"><header><h3>Incidents sur 7 jours</h3><div class="lg" id="lgInc"></div></header><div class="chart-box" id="chInc7"></div></section>
+    <section class="dcard d-types"><header><h3>Incidents du jour par type</h3></header><div class="hbars" id="chTypes"></div></section>
+    <section class="dcard d-ops"><header><h3>Exploitation</h3></header><div class="ops" id="chOps"></div></section>
+  </main>
+
+  <!-- ============ Incidents ============ -->
+  <main class="view view-inc">
+    <section class="inc-main">
+      <div class="inc-sum" id="incSum"></div>
+      <div class="inc-filters">
+        <div class="seg" id="fStatus">
+          <button data-v="active" class="on">Actifs</button><button data-v="all">Tous</button><button data-v="closed">Résolus</button>
+        </div>
+        <label class="fsel"><span>Sévérité</span><select id="fSev"><option value="">Toutes</option><option value="critique">Critique</option><option value="majeure">Majeure</option><option value="mineure">Mineure</option><option value="info">Info</option></select></label>
+        <label class="fsel"><span>Technologie</span><select id="fTech"><option value="">Toutes</option><option value="wind">Éolien</option><option value="solar">Solaire</option></select></label>
+        <label class="fsel"><span>Site</span><select id="fPark"><option value="">Tous</option></select></label>
+        <button class="btn primary" id="btnNewInc2">Créer un incident</button>
+      </div>
+      <div class="inc-table-wrap">
+        <table class="inc-table">
+          <thead><tr><th>N°</th><th>Heure</th><th>Sévérité</th><th>Incident</th><th>Localisation</th><th>Statut</th><th>Équipe</th><th>Durée</th></tr></thead>
+          <tbody id="incRows"></tbody>
+        </table>
+        <div class="empty" id="incEmpty" hidden>Aucun incident ne correspond à ces filtres.</div>
+      </div>
+    </section>
+    <aside class="inc-detail" id="incDetail"></aside>
+  </main>
+</div>
+
+<div class="toasts" id="toasts" aria-live="assertive"></div>
+
+<dialog class="dlg" id="incDialog">
+  <form method="dialog" id="incForm">
+    <h3>Créer un incident</h3>
+    <label class="fld"><span>Site</span><select id="niPark" required></select></label>
+    <label class="fld"><span>Type d’incident</span><select id="niType" required></select></label>
+    <label class="fld"><span>Unité concernée</span><select id="niUnit"></select><em class="help">Laisser « Automatique » pour une unité au hasard. Ignoré pour les incidents de site.</em></label>
+    <label class="fld"><span>Sévérité</span><select id="niSev"><option value="">Par défaut</option><option value="info">Info</option><option value="mineure">Mineure</option><option value="majeure">Majeure</option><option value="critique">Critique</option></select></label>
+    <label class="fld"><span>Description</span><textarea id="niDesc" rows="2" placeholder="Description par défaut du type d’incident"></textarea></label>
+    <div class="dlg-actions"><button type="button" class="btn" id="niCancel">Annuler</button><button type="submit" class="btn primary" value="ok">Créer l’incident</button></div>
+  </form>
+</dialog>
+
+<script src="vendor/leaflet/leaflet.js"></script>
+<script src="js/data.js"></script>
+<script src="js/bus.js"></script>
+<script src="js/sim.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>

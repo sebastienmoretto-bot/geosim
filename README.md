@@ -5,6 +5,8 @@ Pompiers, police, SAMU, bus, taxis, livraisons et dépanneuses circulent **sur l
 
 100 % statique : aucun serveur, aucune clé d'API. Hébergeable tel quel sur GitHub Pages.
 
+> Autre démonstrateur dans ce dépôt : **[Barco Power Solutions](barco-power/)**, une salle de contrôle de parc éolien en mer et solaire européen (`/barco-power/`, avec sa régie `/barco-power/regie.html`).
+
 ## Fonctions
 
 - **N'importe quelle ville** : recherche libre (OpenStreetMap / Nominatim) et raccourcis (Paris, Lyon, Marseille…).
