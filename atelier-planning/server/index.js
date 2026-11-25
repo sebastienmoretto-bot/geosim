@@ -11,7 +11,7 @@ const db = open(path.join(dataDir, 'atelier.db'));
 const app = createApp(db, { dataDir });
 
 app.listen(port, host, () => {
-  console.log(`Atelier Planning démarré sur http://localhost:${port}`);
+  console.log(`Details Agencement démarré sur http://localhost:${port}`);
   console.log(`Données : ${dataDir}`);
   if (!process.env.TZ) console.log('Astuce : définissez TZ=Europe/Paris pour que les rappels partent à la bonne heure.');
 });

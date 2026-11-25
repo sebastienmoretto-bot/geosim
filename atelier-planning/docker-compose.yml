@@ -1,7 +1,7 @@
 services:
   atelier:
     build: .
-    container_name: atelier-planning
+    container_name: details-agencement
     restart: unless-stopped
     ports:
       - "3000:3000"

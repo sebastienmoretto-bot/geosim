@@ -15,7 +15,7 @@ if (db.prepare('SELECT COUNT(*) n FROM projects').get().n > 0) {
   process.exit(0);
 }
 
-setSetting(db, 'company_name', 'Menuiserie Démo');
+setSetting(db, 'company_name', 'Details Agencement');
 const addUser = (name, email, role, workshop, hpd) => {
   const u = db.prepare('SELECT id FROM users WHERE email = ?').get(email);
   if (u) return u.id;

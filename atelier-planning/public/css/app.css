@@ -175,6 +175,8 @@ td input, td select { min-height: 32px; padding: 4px 8px; }
 
 /* Calendrier mensuel */
 .cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--border); gap: 1px; }
+.cal.cal-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.cal-day.past { opacity: .55; }
 .cal-head { background: var(--surface-2); font-size: 12px; font-weight: 600; color: var(--muted); padding: 6px 8px; text-transform: uppercase; }
 .cal-day { background: var(--surface); min-height: 112px; padding: 6px; display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .cal-day.off { background: var(--surface-2); }
@@ -192,7 +194,8 @@ td input, td select { min-height: 32px; padding: 4px 8px; }
 .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 13px; color: var(--muted); }
 .legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
 @media (max-width: 700px) {
-  .cal { grid-template-columns: 1fr; }
+  .cal, .cal.cal-5 { grid-template-columns: 1fr; }
+  .cal-day.past { display: none; }
   .cal-head { display: none; }
   .cal-day.other { display: none; }
   .cal-day { min-height: 0; }
