@@ -127,7 +127,7 @@ CREATE TABLE IF NOT EXISTS wa_inbound (
 `;
 
 const DEFAULT_SETTINGS = {
-  company_name: 'Details Agencement',
+  company_name: 'Détails Agencement',
   hourly_rate: '45',
   buffer_days: '2',           // marge (jours ouvrés) entre livraison et besoin
   fab_margin_days: '1',       // marge (jours ouvrés) entre fin de fabrication et pose

@@ -39,7 +39,7 @@
     const list = (items, fn, empty) => (items.length ? items.map(fn).join('') : `<div class="none">${empty}</div>`);
 
     document.getElementById('root').innerHTML = `
-      <header><img class="logo" src="img/logo.png" alt=""><h1>${esc(d.company)}</h1>
+      <header><img class="logo" src="img/logo.png" alt=""><h1>${esc(String(d.company || '').split(' ')[0])}<small>${esc(String(d.company || '').split(' ').slice(1).join(' '))}</small></h1>
         <span class="date">${DAYS_LONG[td.getDay()]} ${td.getDate()} ${MONTHS[td.getMonth()]}</span>
         <span class="clock" id="clock"></span></header>
       <div class="wrap">

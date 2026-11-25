@@ -1,4 +1,4 @@
-/* Details Agencement — utilitaires communs, routeur et coquille de l'application */
+/* Détails Agencement — utilitaires communs, routeur et coquille de l'application */
 'use strict';
 
 // ---------- HTML sûr ----------
@@ -154,6 +154,12 @@ function confirmAction(text, actionLabel) {
   });
 }
 
+// Logotype texte : premier mot en capitales espacées (« DÉTAILS »), le reste en sous-titre
+function wordmark(company) {
+  const words = String(company || 'Détails Agencement').trim().split(/\s+/);
+  return html`<span class="wordmark"><b>${words[0]}</b>${words.length > 1 ? html`<span>${words.slice(1).join(' ')}</span>` : ''}</span>`;
+}
+
 // ---------- Application ----------
 const Views = {};
 const App = {
@@ -175,8 +181,7 @@ const App = {
 
   renderLogin() {
     document.getElementById('app').innerHTML = String(html`<div class="auth"><form class="card stack" id="login">
-      <img class="auth-logo" src="img/logo.png" alt="">
-      <div><h1>${this.company || 'Details Agencement'}</h1><p class="muted" style="margin:0">Connectez-vous pour accéder au planning.</p></div>
+      <div class="row" style="gap:12px"><img class="brand-logo" src="img/logo.png" alt="" style="width:44px;height:44px">${wordmark(this.company)}</div><p class="muted" style="margin:4px 0 0">Connectez-vous pour accéder au planning.</p>
       <label class="field">E-mail<input name="email" type="email" autocomplete="username" required></label>
       <label class="field">Mot de passe<input name="password" type="password" autocomplete="current-password" required></label>
       <button class="btn primary" type="submit">Se connecter</button></form></div>`);
@@ -190,7 +195,7 @@ const App = {
     document.getElementById('app').innerHTML = String(html`<div class="auth"><form class="card stack" id="setup">
       <img class="auth-logo" src="img/logo.png" alt="">
       <div><h1>Bienvenue</h1><p class="muted" style="margin:0">Premier lancement : créez le compte administrateur.</p></div>
-      <label class="field">Nom de l'entreprise<input name="company_name" required value="Details Agencement"></label>
+      <label class="field">Nom de l'entreprise<input name="company_name" required value="Détails Agencement"></label>
       <label class="field">Votre nom<input name="name" required autocomplete="name"></label>
       <label class="field">E-mail<input name="email" type="email" required autocomplete="username"></label>
       <label class="field">Mot de passe <span class="hint">8 caractères minimum</span><input name="password" type="password" minlength="8" required autocomplete="new-password"></label>
@@ -214,10 +219,10 @@ const App = {
     ].filter(Boolean);
     document.getElementById('app').innerHTML = String(html`<div class="mobile-bar">
         <button class="btn icon ghost" id="menu-btn" aria-label="Ouvrir le menu">${icon('menu')}</button>
-        <img class="brand-logo" src="img/logo.png" alt="" style="width:28px;height:28px"><strong>${this.company || 'Details Agencement'}</strong></div>
+        <img class="brand-logo" src="img/logo.png" alt="" style="width:28px;height:28px">${wordmark(this.company)}</div>
       <div class="layout">
         <aside class="sidebar" id="sidebar">
-          <div class="brand"><img class="brand-logo" src="img/logo.png" alt="">${this.company || 'Details Agencement'}</div>
+          <div class="brand"><img class="brand-logo" src="img/logo.png" alt="">${wordmark(this.company)}</div>
           <nav class="nav">${links.map(([href, ic, label]) => html`<a href="${href}" data-nav>${icon(ic)}<span>${label}</span></a>`)}
             <a href="/atelier" target="_blank" rel="noopener">${icon('tv')}<span>Écran atelier</span></a></nav>
           <div class="sidebar-foot"><div>${this.user.name}</div>

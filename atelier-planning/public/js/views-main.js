@@ -12,7 +12,7 @@ Views.dashboard = async (view) => {
 
   view.innerHTML = String(html`
     <div class="page-head"><div><h1>Tableau de bord</h1><div class="muted">${fmtDate(d.today, { long: true })}</div></div>
-      <div class="actions">${App.canEdit() ? html`<a class="btn primary" href="#/import">${icon('upload')} Importer un devis validé</a>` : ''}</div></div>
+      <div class="actions">${App.canEdit() ? html`<a class="btn primary cta" href="#/import">Importer un devis validé <span class="btn-dot">${icon('right')}</span></a>` : ''}</div></div>
 
     <div class="grid grid-4">
       <div class="card stat ${d.orders_late.length ? 'danger' : ''}"><span class="value">${d.orders_late.length}</span><span class="label">Commandes en retard</span></div>
