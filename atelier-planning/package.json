@@ -1,0 +1,26 @@
+{
+  "name": "atelier-planning",
+  "version": "0.1.0",
+  "description": "Planning, suivi de commandes et rappels pour menuisier / agenceur / cuisiniste",
+  "private": true,
+  "main": "server/index.js",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "node --no-warnings=ExperimentalWarning server/index.js",
+    "dev": "node --no-warnings=ExperimentalWarning --watch server/index.js",
+    "test": "node --no-warnings=ExperimentalWarning --test test/*.test.js",
+    "demo": "node --no-warnings=ExperimentalWarning scripts/demo-data.js",
+    "sample-pdf": "node scripts/make-sample-quote.js"
+  },
+  "license": "UNLICENSED",
+  "dependencies": {
+    "express": "^5.3.0",
+    "multer": "^2.5.0",
+    "pdf-parse": "^2.4.5"
+  },
+  "devDependencies": {
+    "pdfkit": "^0.21.0"
+  }
+}

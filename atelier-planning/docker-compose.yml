@@ -1,0 +1,13 @@
+services:
+  atelier:
+    build: .
+    container_name: atelier-planning
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    environment:
+      TZ: Europe/Paris
+    volumes:
+      - ./data:/data

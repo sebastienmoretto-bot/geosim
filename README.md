@@ -5,6 +5,8 @@ Pompiers, police, SAMU, bus, taxis, livraisons et dépanneuses circulent **sur l
 
 100 % statique : aucun serveur, aucune clé d'API. Hébergeable tel quel sur GitHub Pages.
 
+> Aussi dans ce dépôt : **[Atelier Planning](atelier-planning/)**, planning et suivi de commandes pour menuisier / cuisiniste (application Node.js, voir son README).
+>
 > Autre démonstrateur dans ce dépôt : **[Barco Power Solutions](barco-power/)**, une salle de contrôle de parc éolien en mer et solaire européen (`/barco-power/`, avec sa régie `/barco-power/regie.html`).
 
 ## Fonctions
