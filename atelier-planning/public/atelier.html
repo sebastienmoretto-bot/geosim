@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="noindex">
   <title>Écran atelier</title>
+  <link rel="icon" type="image/png" href="img/favicon.png">
   <style>
     :root {
       --bg: #12110f; --surface: #1d1b18; --surface-2: #26231f; --border: #34302a;
@@ -22,7 +23,9 @@
     html, body, #root { margin: 0; height: 100%; }
     body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
       font-size: clamp(14px, 1.15vw, 22px); line-height: 1.35; padding: 1.2em 1.5em; overflow: hidden; }
-    header { display: flex; align-items: baseline; gap: 1em; margin-bottom: 1em; }
+    header { display: flex; align-items: baseline; gap: .8em; margin-bottom: 1em; }
+    header .logo { width: 2.6em; height: 2.6em; align-self: center; flex: none; border-radius: 50%; box-shadow: 0 0 0 2px rgba(255,255,255,.22); }
+    :root[data-theme="light"] header .logo { box-shadow: none; }
     header h1 { margin: 0; font-size: 1.6em; font-weight: 700; }
     header .date { font-size: 1.3em; color: var(--muted); text-transform: capitalize; }
     header .clock { margin-left: auto; font-size: 2.4em; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; }

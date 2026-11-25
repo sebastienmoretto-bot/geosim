@@ -175,6 +175,7 @@ const App = {
 
   renderLogin() {
     document.getElementById('app').innerHTML = String(html`<div class="auth"><form class="card stack" id="login">
+      <img class="auth-logo" src="img/logo.png" alt="">
       <div><h1>${this.company || 'Atelier Planning'}</h1><p class="muted" style="margin:0">Connectez-vous pour accéder au planning.</p></div>
       <label class="field">E-mail<input name="email" type="email" autocomplete="username" required></label>
       <label class="field">Mot de passe<input name="password" type="password" autocomplete="current-password" required></label>
@@ -187,6 +188,7 @@ const App = {
 
   renderSetup() {
     document.getElementById('app').innerHTML = String(html`<div class="auth"><form class="card stack" id="setup">
+      <img class="auth-logo" src="img/logo.png" alt="">
       <div><h1>Bienvenue</h1><p class="muted" style="margin:0">Premier lancement : créez le compte administrateur.</p></div>
       <label class="field">Nom de l'entreprise<input name="company_name" required placeholder="ex. Menuiserie Dupont"></label>
       <label class="field">Votre nom<input name="name" required autocomplete="name"></label>
@@ -212,10 +214,10 @@ const App = {
     ].filter(Boolean);
     document.getElementById('app').innerHTML = String(html`<div class="mobile-bar">
         <button class="btn icon ghost" id="menu-btn" aria-label="Ouvrir le menu">${icon('menu')}</button>
-        <strong>${this.company || 'Atelier Planning'}</strong></div>
+        <img class="brand-logo" src="img/logo.png" alt="" style="width:28px;height:28px"><strong>${this.company || 'Atelier Planning'}</strong></div>
       <div class="layout">
         <aside class="sidebar" id="sidebar">
-          <div class="brand"><span class="brand-mark">${(this.company || 'A').trim().charAt(0).toUpperCase()}</span>${this.company || 'Atelier Planning'}</div>
+          <div class="brand"><img class="brand-logo" src="img/logo.png" alt="">${this.company || 'Atelier Planning'}</div>
           <nav class="nav">${links.map(([href, ic, label]) => html`<a href="${href}" data-nav>${icon(ic)}<span>${label}</span></a>`)}
             <a href="/atelier" target="_blank" rel="noopener">${icon('tv')}<span>Écran atelier</span></a></nav>
           <div class="sidebar-foot"><div>${this.user.name}</div>
