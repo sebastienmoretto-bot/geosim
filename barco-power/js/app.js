@@ -28,10 +28,20 @@
 
   // ------------------------------------------------------------ Carte
   const map = L.map('map', { zoomControl: false, zoomSnap: 0.25, zoomDelta: 0.5, minZoom: 4, maxZoom: 15, worldCopyJump: false, preferCanvas: false });
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-    subdomains: 'abcd', maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a> · Données d’exploitation simulées',
-  }).addTo(map);
+  // Fonds de carte sans clé d'API : Esri gris foncé (par défaut) et OSM assombri en secours.
+  const SIM_ATTR = ' · Données d’exploitation simulées';
+  const ESRI = 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/';
+  const esriBase = L.tileLayer(ESRI + 'World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16, maxNativeZoom: 16, attribution: 'Fond &copy; Esri, HERE, Garmin, &copy; OpenStreetMap' + SIM_ATTR });
+  const esriLabels = L.tileLayer(ESRI + 'World_Dark_Gray_Reference/MapServer/tile/{z}/{y}/{x}', { maxZoom: 16, maxNativeZoom: 16, pane: 'shadowPane', opacity: 0.85 });
+  const osmDark = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, className: 'tiles-dark', attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' + SIM_ATTR });
+  const esri = L.layerGroup([esriBase, esriLabels]).addTo(map);
+  L.control.layers({ 'Gris foncé (Esri)': esri, 'OpenStreetMap sombre': osmDark }, null, { position: 'bottomright' }).addTo(map);
+  // bascule automatique si le fond Esri ne répond pas
+  let esriErr = 0, esriOk = 0;
+  esriBase.on('tileload', () => { esriOk++; });
+  esriBase.on('tileerror', () => {
+    if (++esriErr >= 6 && esriOk === 0 && map.hasLayer(esri)) { map.removeLayer(esri); osmDark.addTo(map); }
+  });
   L.control.zoom({ position: 'topright' }).addTo(map);
   L.control.scale({ imperial: false, position: 'bottomleft' }).addTo(map);
   const allBounds = L.latLngBounds(D.PARKS.map((p) => [p.lat, p.lng]));

@@ -4,7 +4,7 @@ Démonstrateur de supervision d'un parc européen d'éoliennes en mer et de cent
 
 Les sites sont réels (positions et capacités approximatives) ; **toutes les données d'exploitation sont simulées**. « Barco Power Solutions » est une marque fictive de démonstration.
 
-100 % statique : aucun serveur, aucune clé d'API. Leaflet est inclus dans `vendor/` ; seuls le fond de carte (CARTO) et les polices (Google Fonts) viennent d'Internet.
+100 % statique : aucun serveur, aucune clé d'API. Leaflet est inclus dans `vendor/` ; seuls le fond de carte (Esri, ou OpenStreetMap en secours) et les polices (Google Fonts) viennent d'Internet.
 
 ## Les deux pages
 
@@ -92,4 +92,4 @@ Puis ouvrez http://localhost:8000/barco-power/ et http://localhost:8000/barco-po
 
 ## Crédits
 
-Fond de carte © contributeurs OpenStreetMap © CARTO. Bibliothèque cartographique Leaflet (licence BSD-2, voir `vendor/leaflet/LICENSE`).
+Fond de carte © Esri (World Dark Gray Canvas) et © contributeurs OpenStreetMap. Bibliothèque cartographique Leaflet (licence BSD-2, voir `vendor/leaflet/LICENSE`).
