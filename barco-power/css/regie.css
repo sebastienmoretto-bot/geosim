@@ -1,0 +1,68 @@
+/* Régie : utilisable sur ordinateur portable, tablette ou téléphone */
+body.regie { overflow: auto; min-height: 100vh; }
+.rg-top { position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line); }
+.rg-conn { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--muted); padding: 5px 10px; border: 1px solid var(--line); border-radius: 16px; }
+.rg-conn .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--faint); }
+.rg-conn.on { color: var(--text); border-color: color-mix(in srgb, var(--ok) 45%, transparent); }
+.rg-conn.on .dot { background: var(--ok); box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 25%, transparent); }
+.rg-conn.off .dot { background: var(--crit); }
+.rg-kpis { display: flex; gap: 18px; flex: 1; flex-wrap: wrap; }
+.rg-kpis div { display: flex; flex-direction: column; line-height: 1.2; }
+.rg-kpis span { font-size: 10.5px; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.rg-kpis b { font: 600 16px var(--mono); }
+.rg-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; padding: 14px 16px 24px; grid-template-areas: "view time auto" "scen scen inc" "list list log"; }
+.rc { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.rc h2 { margin: 0; font-size: 12.5px; text-transform: uppercase; letter-spacing: .06em; color: #c7d2de; display: flex; align-items: center; gap: 8px; }
+.rc-view { grid-area: view; } .rc-time { grid-area: time; } .rc-auto { grid-area: auto; } .rc-scen { grid-area: scen; } .rc-inc { grid-area: inc; } .rc-list { grid-area: list; } .rc-log { grid-area: log; }
+.row { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+.row select { flex: 1; min-width: 140px; height: 32px; }
+.lbl { font-size: 11.5px; color: var(--muted); margin-right: 4px; }
+.btn.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 20%, var(--panel-3)); }
+.rg-clock { font: 600 26px var(--mono); color: var(--muted); }
+.tgl { display: flex; align-items: flex-start; gap: 10px; cursor: pointer; font-weight: 500; flex-wrap: wrap; }
+.tgl input { position: absolute; opacity: 0; pointer-events: none; }
+.tgl > span { width: 34px; height: 20px; border-radius: 10px; background: var(--panel-3); border: 1px solid var(--line-2); position: relative; flex-shrink: 0; transition: background .15s; }
+.tgl > span::after { content: ""; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--muted); transition: transform .15s, background .15s; }
+.tgl input:checked + span { background: color-mix(in srgb, var(--accent) 35%, var(--panel-3)); border-color: var(--accent); }
+.tgl input:checked + span::after { transform: translateX(14px); background: #fff; }
+.tgl input:focus-visible + span { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tgl em { font-style: normal; font-size: 11.5px; color: var(--faint); flex-basis: 100%; padding-left: 44px; margin-top: -4px; }
+.scen { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.sc { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; background: var(--panel-2); border: 1px solid var(--line-2); border-left: 3px solid var(--c, var(--accent)); border-radius: 8px; padding: 10px 12px; min-height: 62px; transition: border-color .15s, background .15s; }
+.sc:hover { background: var(--panel-3); }
+.sc:active { transform: translateY(1px); }
+.sc b { font-size: 13px; } .sc span { font-size: 11.5px; color: var(--muted); }
+.sc.storm { --c: var(--storm); } .sc.cloud { --c: #b8c4d2; } .sc.heat { --c: var(--solar); } .sc.grid { --c: var(--curt); } .sc.fault { --c: var(--major); } .sc.crit { --c: var(--crit); } .sc.ok { --c: var(--ok); }
+.sc.flash { background: color-mix(in srgb, var(--c) 22%, var(--panel-2)); }
+.sc-pair { display: flex; flex-direction: column; gap: 4px; }
+.sc-pair .sc { flex: 1; }
+.sc-pair select { height: 28px; font-size: 12px; }
+.form { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 12px; }
+.form .wide { grid-column: 1 / -1; }
+.form input[type="text"] { width: 100%; }
+.cnt { min-width: 22px; height: 20px; border-radius: 10px; background: var(--panel-3); font: 600 11px/20px var(--mono); text-align: center; padding: 0 6px; color: var(--text); }
+.rg-incs { display: flex; flex-direction: column; gap: 6px; max-height: 420px; overflow-y: auto; }
+.ri { display: grid; grid-template-columns: 82px 1fr auto; gap: 10px; align-items: center; background: var(--panel-2); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; }
+.ri-t b { display: block; } .ri-t span { font-size: 11.5px; color: var(--muted); }
+.ri-a { display: flex; gap: 4px; flex-wrap: wrap; justify-content: flex-end; }
+.rg-log { display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+.rg-log div { display: grid; grid-template-columns: 44px 74px 1fr; gap: 8px; align-items: center; }
+.rg-log .sev-pill { height: 16px; font-size: 9.5px; justify-content: center; }
+.danger { margin-top: auto; padding-top: 10px; border-top: 1px solid var(--line); display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+.confirm { font-size: 12px; color: var(--muted); display: inline-flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.seg button { flex: 1; }
+@media (max-width: 1100px) {
+  .rg-grid { grid-template-columns: 1fr 1fr; grid-template-areas: "view time" "auto auto" "scen scen" "inc inc" "list list" "log log"; }
+  .scen { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 680px) {
+  .rg-top { padding: 10px 16px; gap: 10px; }
+  .rg-kpis { display: none; }
+  .rg-grid { grid-template-columns: minmax(0, 1fr); grid-template-areas: "view" "time" "auto" "scen" "inc" "list" "log"; padding: 12px 16px 24px; }
+  .scen { grid-template-columns: 1fr 1fr; }
+  .form { grid-template-columns: 1fr; }
+  .ri { grid-template-columns: 1fr; }
+  .ri-a { justify-content: flex-start; }
+}
+
+.rg-top a.btn { display: inline-flex; align-items: center; text-decoration: none; }
